@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/negocio_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="50dp"
+        android:layout_height="39dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="34dp"
+        android:layout_marginTop="220dp"
+        android:background="?android:attr/colorBackground"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_menu_send"
+    />
+
+    <CheckBox
+        android:id="@+id/likeIcon"
+        android:layout_width="39dp"
+        android:layout_height="41dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/imageButton1"
+        android:layout_marginStart="23dp"
+        android:button="@null"
+        android:checked="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/ic_thumb_up_black_24dp"
+    />
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="36dp"
+        android:layout_height="27dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="11dp"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="onBackArrowClicked"
+        app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
+
+</RelativeLayout>

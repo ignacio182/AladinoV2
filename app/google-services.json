@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "905126050285",
+    "firebase_url": "https://aladino-8ace5.firebaseio.com",
+    "project_id": "aladino-8ace5",
+    "storage_bucket": "aladino-8ace5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905126050285:android:2ec4cae4129baeff",
+        "android_client_info": {
+          "package_name": "com.example.ignacio.aladino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905126050285-dja37dpnaqrpmd3bsn33kmuvujaav1jp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1YgSd6t64rTegTWYcinG_ScLpDHr6wsQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905126050285:android:166d28007ff1cb0b",
+        "android_client_info": {
+          "package_name": "com.product.aladino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905126050285-dja37dpnaqrpmd3bsn33kmuvujaav1jp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1YgSd6t64rTegTWYcinG_ScLpDHr6wsQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

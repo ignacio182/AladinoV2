@@ -1,27 +1,51 @@
 package com.product.aladino;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.SnapshotParser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+                    NegocioAdapter.OnNegocioSelectedListener,
+                    FilterFragment.FilterListener{
+
+    private RecyclerView recyclerView;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference negociosRef = db.collection("negocios");
+    private NegocioAdapter negocioAdapter;
+    private UserLocation userLocation;
+    private DrawerLayout drawerLayout;
+    private FilterFragment filterFragment;
+    private Filters mFilters;
+    private Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mFilters = Filters.getDefault();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -31,6 +55,56 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        userLocation = new UserLocation(this);
+        filterFragment = new FilterFragment();
+        setUpRecyclerView();
+    }
+
+    private void setUpRecyclerView(){
+        query = negociosRef;
+        FirestoreRecyclerOptions<Negocio> options = new FirestoreRecyclerOptions.Builder<Negocio>()
+                .setQuery(query, new SnapshotParser<Negocio>() {
+                    @NonNull
+                    @Override
+                    public Negocio parseSnapshot(@NonNull DocumentSnapshot snapshot) {
+                        Negocio negocio = snapshot.toObject(Negocio.class);
+                        negocio.setId(snapshot.getId());
+                        return negocio;
+                    }
+                })
+                .build();
+
+
+        negocioAdapter = new NegocioAdapter(options, this);
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), mLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(mDividerItemDecoration);
+        recyclerView.setAdapter(negocioAdapter);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        onFilter(this.mFilters);
+        negocioAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        negocioAdapter.stopListening();
+    }
+
+    @Override
+    public void onNegocioSelected(Negocio negocio) {
+        Intent intent = new Intent(this, NegocioDetailActivity.class);
+        intent.putExtra(NegocioDetailActivity.KEY_NEGOCIO_ID, negocio.getId());
+        startActivity(intent);
     }
 
     @Override
@@ -43,26 +117,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onFilterClicked() {
+        filterFragment.show(getSupportFragmentManager(), FilterFragment.TAG);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -79,14 +135,36 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFilter(Filters filters) {
+        // Construct query basic query
+        Query query_filter = negociosRef;
+
+        // Category (equality filter)
+        if (filters.hasCategory()) {
+            query_filter = query.whereEqualTo("category", filters.getCategory());
+        }
+
+        query = query_filter;
+
+        // Stop listening
+        negocioAdapter.stopListening();
+
+        // Clear existinkodig data
+        negocioAdapter.getSnapshots().clear();
+        negocioAdapter.notifyDataSetChanged();
+
+        // Listen to new query
+        query = query_filter;
+        negocioAdapter.startListening();
+
+        this.mFilters = filters;
     }
 }
