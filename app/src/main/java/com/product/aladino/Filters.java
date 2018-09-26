@@ -21,7 +21,8 @@ import com.google.firebase.firestore.Query;
 
 public class Filters {
 
-    private String category = null;
+    private String categoria = null;
+    private String nombre = null;
 
     public Filters() {}
 
@@ -31,14 +32,26 @@ public class Filters {
     }
 
     public boolean hasCategory() {
-        return !(TextUtils.isEmpty(category));
+        return !(TextUtils.isEmpty(categoria));
     }
 
     public String getCategory() {
-        return category;
+        return categoria;
     }
 
     public void setCategory(String category) {
-        this.category = category;
+        this.categoria = category;
+    }
+
+    public boolean hasName() {
+        return !(TextUtils.isEmpty(nombre));
+    }
+
+    public String getName() {
+        return nombre;
+    }
+
+    public void setName(String name) {
+        this.nombre = name;
     }
 }

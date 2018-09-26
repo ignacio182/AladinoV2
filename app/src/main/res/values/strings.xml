@@ -11,7 +11,6 @@
     <!-- Types of food I could think of in 5 minutes -->
     <string-array name="categories">
         <item>@string/value_any_category</item>
-
         <item>Comidas</item>
         <item>Construccion</item>
         <item>Ferreteria</item>

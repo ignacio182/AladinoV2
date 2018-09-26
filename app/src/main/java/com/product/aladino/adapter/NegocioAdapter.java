@@ -1,6 +1,7 @@
-package com.product.aladino;
+package com.product.aladino.adapter;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,13 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.product.aladino.model.Negocio;
+import com.product.aladino.R;
+import com.product.aladino.util.UserLocation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,15 +47,15 @@ public class NegocioAdapter extends FirestoreRecyclerAdapter<Negocio, NegocioAda
                 .into(holder.photo);
 
 
-        //Double distance = GeoUtils.distance(UserLocation.getLatitud(),UserLocation.getLongitud(),model.getLocalizacion().getLatitude(),model.getLocalizacion().getLongitude());
-        //distance /= 1000;
-        Double distance = 2.50;
+        float distance = getDistance(UserLocation.getLatitud(),UserLocation.getLongitud(),model.getLocalizacion().getLatitude(), model.getLocalizacion().getLongitude());
+        distance /= 1000;
+        //Double distance = 2.50;
 
         holder.name.setText(model.getNombre());
         holder.numRecos.setText(String.valueOf(model.getNumrecos()));
 
         holder.open.setText(model.getOpenOrClose());
-        if ((model.getOpenOrClose().equals("abierto"))) {
+        if ((model.getOpenOrClose().equals("Abierto"))) {
             holder.open.setTextColor(Color.parseColor("#a4c639"));
         } else {
             holder.open.setTextColor(Color.RED);
@@ -72,6 +75,12 @@ public class NegocioAdapter extends FirestoreRecyclerAdapter<Negocio, NegocioAda
     public NegocioHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         return new NegocioHolder(v);
+    }
+
+    private float getDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
+        float[] distance = new float[2];
+        Location.distanceBetween(lat1, lon1, lat2, lon2, distance);
+        return distance[0];
     }
 
     class NegocioHolder extends RecyclerView.ViewHolder {

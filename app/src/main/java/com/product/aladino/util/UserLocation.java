@@ -1,4 +1,4 @@
-package com.product.aladino;
+package com.product.aladino.util;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,8 +14,8 @@ public class UserLocation implements LocationListener {
 
     private LocationManager locationManager;
     private Context context;
-    private static Double latitud;
-    private static Double longitud;
+    private static double latitud;
+    private static double longitud;
     private Location location;
 
     public UserLocation(Context context){
@@ -46,11 +46,11 @@ public class UserLocation implements LocationListener {
 
     }
 
-    public static Double getLatitud(){
+    public static double getLatitud(){
         return latitud;
     }
 
-    public static Double getLongitud() {
+    public static double getLongitud() {
         return longitud;
     }
 

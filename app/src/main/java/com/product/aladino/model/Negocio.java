@@ -1,4 +1,4 @@
-package com.product.aladino;
+package com.product.aladino.model;
 
 import com.google.firebase.firestore.GeoPoint;
 
